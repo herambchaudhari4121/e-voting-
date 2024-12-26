@@ -1,0 +1,65 @@
+/* Ensure there is no padding or margin globally */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Full height for body and html */
+  width: 100%; /* Full width for body and html */
+  background-color: #121212; /* Ensure consistent dark background */
+  overflow: hidden; /* Prevent unwanted scrollbars */
+}
+
+/* Ensure #root takes full screen */
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: #121212; /* Consistent background */
+}
+
+.App {
+  text-align: center;
+  height: 100%; /* Ensure App takes full height */
+  width: 100%; /* Ensure App takes full width */
+  background-color: #121212; /* Match the dark theme */
+  overflow: hidden; /* Prevent any scrolling */
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34; /* You can adjust this for consistency */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
