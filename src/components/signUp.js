@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import Lottie from 'lottie-react';
 import animationData from './Animation-1.json'; // Import your Lottie animation JSON
+import axios from 'axios'; // Import axios
 
 const SignUp = ({ onSignUpComplete }) => {
   // State variables for controlled inputs
@@ -14,23 +15,40 @@ const SignUp = ({ onSignUpComplete }) => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-    // Here you would typically handle the sign-up logic (e.g., API call)
-    console.log({ email, password });
-    // Reset the form
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setError("");
-    onSignUpComplete(); // Call the completion handler
 
-    // Redirect to the login page
-    navigate("/login"); // Redirect to the login page
+    try {
+      // Send a POST request to the backend API
+      const response = await axios.post('http://localhost:1000/api/auth/register', {
+        username: email, // Assuming you want to use email as username
+        password: password,
+        confirmPassword: confirmPassword,
+      });
+
+      // Handle successful registration
+      console.log(response.data); // Log the response from the server
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setError("");
+      onSignUpComplete(); // Call the completion handler
+
+      // Redirect to the login page
+      navigate("/login"); // Redirect to the login page
+    } catch (err) {
+      // Handle errors (e.g., user already exists)
+      if (err.response) {
+        // Check if the error response has a message
+        setError(err.response.data.message || "An error occurred. Please try again."); // Set error message from server response
+      } else {
+        setError("An error occurred. Please try again."); // Generic error message
+      }
+    }
   };
 
   return (
@@ -71,7 +89,7 @@ const SignUp = ({ onSignUpComplete }) => {
               style={styles.input}
             />
           </div>
-          {error && <p style={styles.error}>{error}</p>}
+          {error && <p style={styles.error}>{error}</p>} {/* Render error message */}
           <div style={styles.buttonContainer}>
             <button
               type="submit"
@@ -97,7 +115,7 @@ const SignUp = ({ onSignUpComplete }) => {
   );
 };
 
-// Styles
+// Styles (same as before)
 const styles = {
   container: {
     display: "flex",

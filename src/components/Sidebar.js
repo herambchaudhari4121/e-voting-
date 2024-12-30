@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import axios from "axios";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Track sidebar state
   const sidebarRef = useRef(null); // Reference to the sidebar element
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
@@ -30,6 +33,15 @@ const Sidebar = () => {
     };
   }, [isSidebarOpen]);
 
+  const handleLogout = () => {
+    // Remove the token from local storage
+    localStorage.removeItem('token');
+    // Optionally, you can also remove the token from axios defaults
+    delete axios.defaults.headers.common['Authorization'];
+    // Redirect to the login page
+    navigate('/login'); // Change this to your desired route
+  };
+
   const sidebarStyle = {
     position: "fixed",
     top: 0,
@@ -54,6 +66,7 @@ const Sidebar = () => {
     fontWeight: "bold",
     transition: "background-color 0.3s, color 0.3s, box-shadow 0.3s", // Added box-shadow transition
     borderBottom: "1px solid #333", // Darker border for separation
+    display: "block", // Make the link a block element
   };
 
   const linkHoverStyle = {
@@ -61,6 +74,9 @@ const Sidebar = () => {
     color: "#fff", // White text on hover
     boxShadow: "0 0 10px rgba(0, 123, 255, 0.8)", // Glowing effect
   };
+
+  // Define the links array
+  const links = ["Home", "Elections", "My Votes", "Help", "Profile"];
 
   return (
     <div>
@@ -84,10 +100,10 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        ref={sidebarRef} // Assigning the ref to the sidebar div
+ ref={sidebarRef} // Assigning the ref to the sidebar div
         style={sidebarStyle}
       >
-        {["Home", "Elections", "My Votes", "Help", "Profile", "Logout"].map((link, index) => (
+        {links.map((link, index) => (
           <a 
             key={index}
             href={`/${link.toLowerCase().replace(" ", "")}`} // Generate href dynamically
@@ -105,7 +121,24 @@ const Sidebar = () => {
           >
             {link}
           </a>
- ))}
+        ))}
+        <a 
+          href="#"
+          onClick={handleLogout} // Handle logout on click
+          style={linkStyle} 
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = linkHoverStyle.backgroundColor;
+            e.currentTarget.style.color = linkHoverStyle.color;
+            e.currentTarget.style.boxShadow = linkHoverStyle.boxShadow; // Add glowing effect
+          }} 
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = '';
+            e.currentTarget.style.color = '#007bff';
+            e.currentTarget.style.boxShadow = 'none'; // Remove glow
+          }}
+        >
+          Logout
+        </a>
       </div>
     </div>
   );
