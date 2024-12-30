@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import Lottie from 'lottie-react';
 import animationData from './Animation-1.json'; // Import your Lottie animation JSON
+import axios from 'axios'; // Import axios
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,18 +13,34 @@ const Login = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically handle the login logic (e.g., API call)
-    console.log({ email, password });
-    
+    setError(""); // Reset error message
+
+    try {
+      // Send login request to the server
+      const response = await axios.post('http://localhost:1000/api/auth/login', { username: email, password });
+
+      if (response.data.success) {
+        const token = response.data.token; // Get the token from the response
+        localStorage.setItem('token', token); // Store the token in local storage
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set the token in axios headers
+
+        // Redirect to the election selection page or dashboard after successful login
+        navigate("/election-selection"); // Change this to your desired route
+      }
+    } catch (err) {
+      // Handle errors
+      if (err.response) {
+        setError(err.response.data.message || 'Login failed. Please try again.');
+      } else {
+        setError('An error occurred. Please try again.');
+      }
+    }
+
     // Reset the form
     setEmail("");
     setPassword("");
-    setError("");
-
-    // Redirect to the election selection page or dashboard after successful login
-    navigate("/election-selection"); // Change this to your desired route
   };
 
   return (
@@ -80,7 +97,7 @@ const Login = () => {
   );
 };
 
-// Styles
+// Styles (same as before)
 const styles = {
   container: {
     display: "flex",
