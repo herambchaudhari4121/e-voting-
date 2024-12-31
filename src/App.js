@@ -7,6 +7,7 @@ import VoterHistoryPage from "./components/VoterHistoryPage";
 import SignUp from "./components/signUp"; // Import the SignUp component
 import Login from "./components/login"; // Import the Login component
 import Form from './components/Form';
+import ProfilePage from "./components/profilePage";
 
 function App() {
   const [currentElection, setCurrentElection] = useState(null);
@@ -57,6 +58,7 @@ function App() {
           } />
           <Route path="/history" element={<VoterHistoryPage onReturnToDashboard={handleReturnToDashboard} />} />
           <Route path="/" element={<Navigate to="/signup" />} /> {/* Redirect to sign-up */}
+          <Route path="/profile" element={<ProfilePage />} /> 
           <Route path="/form" element={isSignedUp ? <Form /> : <Navigate to="/signup" />} /> {/* Conditional rendering for form */}
         </Routes>
       </div>

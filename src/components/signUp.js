@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import axios from 'axios'; // Import axios
-import animationData from './Animation-1.json'
+import animationData from './Animation-1.json';
 import Lottie from "lottie-react";
 
 const SignUp = ({ onSignUpComplete }) => {
@@ -27,7 +27,6 @@ const SignUp = ({ onSignUpComplete }) => {
       const response = await axios.post('http://localhost:1000/api/auth/register', {
         username: email, // Assuming you want to use email as username
         password: password,
-        confirmPassword: confirmPassword,
       });
 
       // Handle successful registration
@@ -37,6 +36,10 @@ const SignUp = ({ onSignUpComplete }) => {
       setConfirmPassword("");
       setError("");
       onSignUpComplete(); // Call the completion handler
+
+      // Store the user ID in local storage
+      localStorage.setItem('userId', response.data.userId); // Store userId in local storage
+      console.log('User  ID stored in local storage:', response.data.userId);
 
       // Redirect to the form page after sign-up
       navigate("/form"); // Redirect to the form page

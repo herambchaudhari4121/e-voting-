@@ -24,9 +24,17 @@ const Form = () => {
       return;
     }
 
+    // Retrieve userId from local storage
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      setError("User  ID is not found. Please log in again.");
+      return;
+    }
+
     try {
       // Send a POST request to the backend API
       const response = await axios.post('http://localhost:1000/api/form', {
+        userId, // Include userId in the request body
         name,
         mobileNumber,
         dateOfBirth,
@@ -44,7 +52,7 @@ const Form = () => {
       setError("");
 
       // Redirect to a confirmation page or another page
-      navigate("/confirmation"); // Redirect to the confirmation page
+      navigate("/login"); // Redirect to the confirmation page
     } catch (err) {
       // Handle errors
       if (err.response) {
