@@ -9,13 +9,6 @@ const userSchema = new mongoose.Schema({
     password: { 
         type: String, 
         required: true 
-    },
-    createdAt: { 
-        type: Date, 
-        default: Date.now // Automatically set the creation date
-    },
-    updatedAt: { 
-        type: Date 
     }
 });
 
@@ -25,4 +18,4 @@ userSchema.pre('save', function(next) {
     next();
 });
 
-module.exports = mongoose.model('User ', userSchema); // Corrected model name
+module.exports = mongoose.model('User ', userSchema);
