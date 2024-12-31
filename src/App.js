@@ -6,10 +6,13 @@ import VoteConfirmationPage from "./components/VoteConfirmationPage";
 import VoterHistoryPage from "./components/VoterHistoryPage";
 import SignUp from "./components/signUp"; // Import the SignUp component
 import Login from "./components/login"; // Import the Login component
+import Form from './components/Form';
+import ProfilePage from "./components/profilePage";
 
 function App() {
   const [currentElection, setCurrentElection] = useState(null);
   const [transactionHash, setTransactionHash] = useState(null);
+  const [isSignedUp, setIsSignedUp] = useState(false); // State to track if user is signed up
 
   const handleVoteNow = (electionId) => {
     setCurrentElection(electionId); // Set the current election
@@ -26,7 +29,7 @@ function App() {
   };
 
   const handleSignUpComplete = () => {
-    // Logic after sign-up can be added here
+    setIsSignedUp(true); // Update state to indicate user has signed up
   };
 
   return (
@@ -55,6 +58,8 @@ function App() {
           } />
           <Route path="/history" element={<VoterHistoryPage onReturnToDashboard={handleReturnToDashboard} />} />
           <Route path="/" element={<Navigate to="/signup" />} /> {/* Redirect to sign-up */}
+          <Route path="/profile" element={<ProfilePage />} /> 
+          <Route path="/form" element={isSignedUp ? <Form /> : <Navigate to="/signup" />} /> {/* Conditional rendering for form */}
         </Routes>
       </div>
     </Router>

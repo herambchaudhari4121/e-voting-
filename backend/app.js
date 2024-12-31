@@ -7,6 +7,7 @@ const cors = require('cors');
 const connectDB = require('./src/config/db');
 const authenticateToken = require('./src/middleware/authenticate');
 const authRoutes = require('./src/routes/authRoute');
+const Form = require('./src//routes/form');
 
 const app = express();
 const PORT = 1000;
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 connectDB();
 
 app.use('/api/auth', authRoutes);
+app.use('/api/form', Form);
 
 // Start the server
 app.listen(PORT, () => {

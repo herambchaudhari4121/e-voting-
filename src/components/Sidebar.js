@@ -36,6 +36,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     // Remove the token from local storage
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     // Optionally, you can also remove the token from axios defaults
     delete axios.defaults.headers.common['Authorization'];
     // Redirect to the login page
@@ -67,6 +68,7 @@ const Sidebar = () => {
     transition: "background-color 0.3s, color 0.3s, box-shadow 0.3s", // Added box-shadow transition
     borderBottom: "1px solid #333", // Darker border for separation
     display: "block", // Make the link a block element
+    cursor: "pointer", // Change cursor to pointer
   };
 
   const linkHoverStyle = {
@@ -76,7 +78,13 @@ const Sidebar = () => {
   };
 
   // Define the links array
-  const links = ["Home", "Elections", "My Votes", "Help", "Profile"];
+  const links = [
+    { name: "Home", path: "/election-selection" },
+    { name: "Elections", path: "/elections" },
+    { name: "My Votes", path: "/my-votes" },
+    { name: "Help", path: "/help" },
+    { name: "Profile", path: "/profile" } // Add the Profile link with path
+  ];
 
   return (
     <div>
@@ -99,15 +107,12 @@ const Sidebar = () => {
       </button>
 
       {/* Sidebar */}
-      <div
- ref={sidebarRef} // Assigning the ref to the sidebar div
-        style={sidebarStyle}
-      >
+      <div ref={sidebarRef} style ={sidebarStyle}>
         {links.map((link, index) => (
-          <a 
+          <div 
             key={index}
-            href={`/${link.toLowerCase().replace(" ", "")}`} // Generate href dynamically
             style={linkStyle} 
+            onClick={() => navigate(link.path)} // Use navigate for redirection
             onMouseOver={(e) => {
               e.currentTarget.style.backgroundColor = linkHoverStyle.backgroundColor;
               e.currentTarget.style.color = linkHoverStyle.color;
@@ -119,11 +124,10 @@ const Sidebar = () => {
               e.currentTarget.style.boxShadow = 'none'; // Remove glow
             }}
           >
-            {link}
-          </a>
+            {link.name}
+          </div>
         ))}
-        <a 
-          href="#"
+        <div 
           onClick={handleLogout} // Handle logout on click
           style={linkStyle} 
           onMouseOver={(e) => {
@@ -138,7 +142,7 @@ const Sidebar = () => {
           }}
         >
           Logout
-        </a>
+        </div>
       </div>
     </div>
   );

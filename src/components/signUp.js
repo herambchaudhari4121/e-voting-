@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
-import Lottie from 'lottie-react';
-import animationData from './Animation-1.json'; // Import your Lottie animation JSON
 import axios from 'axios'; // Import axios
+import animationData from './Animation-1.json';
+import Lottie from "lottie-react";
 
 const SignUp = ({ onSignUpComplete }) => {
   // State variables for controlled inputs
@@ -27,7 +27,6 @@ const SignUp = ({ onSignUpComplete }) => {
       const response = await axios.post('http://localhost:1000/api/auth/register', {
         username: email, // Assuming you want to use email as username
         password: password,
-        confirmPassword: confirmPassword,
       });
 
       // Handle successful registration
@@ -38,8 +37,12 @@ const SignUp = ({ onSignUpComplete }) => {
       setError("");
       onSignUpComplete(); // Call the completion handler
 
-      // Redirect to the login page
-      navigate("/login"); // Redirect to the login page
+      // Store the user ID in local storage
+      localStorage.setItem('userId', response.data.userId); // Store userId in local storage
+      console.log('User  ID stored in local storage:', response.data.userId);
+
+      // Redirect to the form page after sign-up
+      navigate("/form"); // Redirect to the form page
     } catch (err) {
       // Handle errors (e.g., user already exists)
       if (err.response) {
@@ -131,10 +134,6 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  },
-  image: {
-    maxWidth: "60%", // Set a maximum width for the animation
-    height: "auto",
   },
   formCard: {
     padding: "60px",
